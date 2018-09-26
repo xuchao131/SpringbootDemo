@@ -18,6 +18,8 @@ public class DemoController {
 	public Map<String,Object> test(){
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("name", "李四");
+		map.put("age", "24");
+		map.put("address", "昌平区");
 		return map;
 	}
 }
