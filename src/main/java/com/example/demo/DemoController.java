@@ -39,8 +39,8 @@ public class DemoController {
 	
 	@RequestMapping("/insertUser")
 	public Integer insertUser(DemoUser demoUser){
-		demoUser.setId("4");
-		demoUser.setName("赵六");
+		demoUser.setId("1");
+		demoUser.setName("张三");
 		demoUser.setAge(30);
 		demoUser.setSex("女");
 		demoDao.save(demoUser);
