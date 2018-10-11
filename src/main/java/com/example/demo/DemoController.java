@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,6 +22,18 @@ public class DemoController {
 	
 	@Autowired
 	private DemoDao demoDao;
+	@Autowired
+	private RedisTemplate<Object, Object> redisTemplate;
+	
+	@RequestMapping("/redisTest")
+	public Object redisTest(){
+		redisTemplate.opsForValue().set("name", "张三");
+		redisTemplate.opsForValue().set("age", 35);
+		redisTemplate.opsForValue().set("sex", "男");
+		redisTemplate.opsForValue().set("address", "昌平");
+		redisTemplate.opsForValue().set("tel", 123456);
+		return redisTemplate.opsForValue().get("name");
+	}
 	
 	@RequestMapping("/index")
 	public Map<String,Object> test(){
