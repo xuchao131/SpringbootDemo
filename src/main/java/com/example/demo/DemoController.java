@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,12 +28,23 @@ public class DemoController {
 	
 	@RequestMapping("/redisTest")
 	public Object redisTest(){
-		redisTemplate.opsForValue().set("name", "张三");
+		/*redisTemplate.opsForValue().set("name", "张三");
 		redisTemplate.opsForValue().set("age", 35);
 		redisTemplate.opsForValue().set("sex", "男");
 		redisTemplate.opsForValue().set("address", "昌平");
-		redisTemplate.opsForValue().set("tel", 123456);
-		return redisTemplate.opsForValue().get("name");
+		redisTemplate.opsForValue().set("tel", 123456);*/
+		//先去redis中查询
+		Object demoUser1 = redisTemplate.opsForValue().get("demoUser1");
+		if(StringUtils.isEmpty(demoUser1)){
+			//如果查不到则去数据库查询
+			List<DemoUser> list = queryByName("李四");
+			//将查询结果保存到redis中用于下次查询
+			redisTemplate.opsForValue().set("demoUser1", list.get(0));
+			return list.get(0);
+		}else{
+			//如果查到则直接返回数据
+			return demoUser1;
+		}
 	}
 	
 	@RequestMapping("/index")
@@ -62,7 +74,7 @@ public class DemoController {
 	
 	@RequestMapping("/queryByName")
 	public List<DemoUser> queryByName(String name){
-		name = "李四";
+		//name = "刘一";
 		List<DemoUser> list = demoDao.findByName(name);
 		return list;
 	}
